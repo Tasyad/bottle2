@@ -3,6 +3,7 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from blog.models import Post
 
 
 def register(request):
@@ -35,11 +36,25 @@ def profile(request):
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
+        user_posts = Post.objects.filter(author=request.user)
         context = {
             'user_form': user_form,
-            'profile_form': profile_form
+            'profile_form': profile_form,
+            'user_posts': user_posts
         }
 
     return render(request, 'users/profile.html', context)
 
 
+# def del_user(request, username):
+#     try:
+#         user_posts = Post.objects.filter(author=request.user)
+#         user_posts.delete()
+#         messages.success(request, "The user is deleted")
+#
+#     except username.DoesNotExist:
+#         messages.error(request, "User doesnot exist")
+#         return render(request, 'users/profile.html')
+#
+#
+#     return render(request, 'users/profile.html')
