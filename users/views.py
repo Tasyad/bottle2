@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views import generic
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
 from blog.models import Post
+from django.contrib.auth.decorators import login_required
+
 
 
 def register(request):
@@ -46,15 +50,20 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 
-# def del_user(request, username):
-#     try:
-#         user_posts = Post.objects.filter(author=request.user)
-#         user_posts.delete()
-#         messages.success(request, "The user is deleted")
-#
-#     except username.DoesNotExist:
-#         messages.error(request, "User doesnot exist")
-#         return render(request, 'users/profile.html')
-#
-#
-#     return render(request, 'users/profile.html')
+class DeleteUser(SuccessMessageMixin, generic.DeleteView):
+    model = User
+    template_name = 'users/delete_user.html'
+    success_message = 'User has been deleted'
+    success_url = reverse_lazy('blog-home')
+
+
+@login_required
+def user_detail(request, pk):
+    user = User.objects.get(pk=pk),
+    posts = Post.objects.filter(author_id=pk)
+    context = {
+        'object': user,
+        'posts': posts,
+    }
+
+    return render(request, 'users/user_detail.html', context=context)

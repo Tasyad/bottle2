@@ -51,8 +51,14 @@
                         <label class="small mb-1">Change Avatar:</label>
                         <input type="file" name="image">
                     </div>
-                <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
-                <button type="submit" class="btn btn-dark btn-lg">Delete</button>
+                <button class="btn btn-outline-info" type="submit">
+                    Save Changes
+                </button>
+                <button class="btn btn-outline-danger">
+                    <a href="{% url 'delete_user' user.pk %}">
+                        Delete Profile
+                    </a>
+                </button>
                 </div>
             </div>
         </form>
@@ -83,7 +89,7 @@
             	<div class="metafooter">
 								<div class="wrapfooter">
 									<span class="meta-footer-thumb">
-									<a href="{% url 'profile' %}"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+									<a href="{% url 'profile' %}"><img class="author-thumb" src="{{ user.profile.image.url }}" alt="Sal"></a>
 									</span>
 									<span class="author-meta">
 									<span class="post-name"><a href="{% url 'profile' %}">{{ object.author }}</a></span><br/>
