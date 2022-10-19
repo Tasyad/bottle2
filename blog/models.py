@@ -1,7 +1,7 @@
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Model
-from django.utils import timezone
 from django.urls import reverse
 
 
@@ -9,7 +9,7 @@ class Post(Model):
     title = models.CharField(max_length=255, null=False)
     content = models.CharField(max_length=255, null=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post_date = models.DateField(default=timezone.now)
+    post_date = models.DateTimeField(default=datetime.now)
     image = models.ImageField(default='default.jpg', upload_to='post_image/')
 
     # def __str__(self):
@@ -17,5 +17,6 @@ class Post(Model):
 
     def get_absolute_url(self):
         return reverse('blog-detail', kwargs={'pk': self.pk})
+
 
 
